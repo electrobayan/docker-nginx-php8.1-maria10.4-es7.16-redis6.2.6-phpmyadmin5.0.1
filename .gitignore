@@ -1,0 +1,6 @@
+.idea
+www
+!www/hello.loc
+hosts
+!hosts/hello-loc.conf
+!hosts/phpmyadmin-loc.conf

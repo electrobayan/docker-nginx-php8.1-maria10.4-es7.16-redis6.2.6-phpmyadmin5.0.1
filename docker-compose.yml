@@ -1,0 +1,50 @@
+version: '3.7'
+services:
+    nginx:
+        image: nginx:latest
+        restart: always
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./hosts:/etc/nginx/conf.d
+            - ./www:/var/www
+            - ./logs:/var/log/nginx
+        depends_on:
+            - php
+            - maria
+
+    php:
+        build: ./images/php
+        depends_on:
+            - maria
+        volumes:
+            - ./www:/var/www
+            - ./images/php/php.ini:/usr/local/etc/php/conf.d/40-custom.ini
+            - ~/.ssh:/root/.ssh
+    maria:
+        image: mariadb:10.4
+        restart: always
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:5.0.1
+        restart: always
+        environment:
+            PMA_HOST: maria
+            PMA_USER: root
+            PMA_PASSWORD: root
+            PMA_ABSOLUTE_URI: "http://phpmyadmin.loc/"
+        depends_on:
+            - maria
+            - php
+            - nginx
+    elasticsearch:
+        build: ./elasticsearch
+        restart: always
+        environment:
+            - discovery.type=single-node
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # ES Memory limits
+
