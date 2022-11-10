@@ -13,7 +13,6 @@ services:
         depends_on:
             - php
             - maria
-
     php:
         build: ./images/php
         depends_on:

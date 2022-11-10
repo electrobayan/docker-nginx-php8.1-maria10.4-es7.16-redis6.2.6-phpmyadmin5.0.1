@@ -42,3 +42,136 @@ server {
 ```
 8) Don't forget to add your new domain ``my-new-project.loc`` to your computer hosts file
 9) Go ``http://my-new-project.loc/`` to see your project
+
+### Configure Magento:
+10) Create ``auth.json`` file in the root of your magento project. Fill it with your Adobe account keys and with your github oath key. Any extra credentials for any 3-rd party extensions can be added as well. Example:
+```
+{
+    "http-basic": {
+        "repo.magento.com": {
+            "username": "XXXXXXXX",
+            "password": "XXXXXXXX"
+        }
+    },
+    "github-oauth": {
+        "github.com": "ghp_XXXXXXXXXXXXXXXXXXXXXXX"
+    }
+}
+```
+
+## Bonus
+Add these bash scripts to your ``.bashrc`` files. Function name can be any you like.
+
+Enter your PHP container via CLI. 
+Please, note that your container name MUST contain ``php-`` in the grep part. 
+```
+enterServer(){
+    docker exec -it $(docker ps --format "{{.Names}}" | grep "php-") bash
+}
+```
+
+Stop all running containers:
+``
+stopAllContainers(){
+    docker stop $(docker ps -q)
+}
+``
+
+Run ``composer install`` for a particular project. 
+Pass your project folder name as an argument. Example ``composerInstall hello.loc``
+Please, note that your container name MUST contain ``php-`` in the grep part.
+```
+composerInstall(){
+    docker exec -i $(docker ps --format "{{.Names}}" | grep "php-") composer install --working-dir=/var/www/$1
+}
+```
+
+Import the database where you should pass:
+1) You MySQL/MariaDb container name
+2) Your database name
+3) Your dump path
+```
+importDb(){
+    docker exec -i $1 mysql -uroot -proot $2 < $3
+}
+```
+
+Export the database where you should pass:
+1) You MySQL/MariaDb container name
+2) Your database name
+```
+exportDb(){
+    docker exec -i $1 mysqldump -uroot -proot $2 | sed -e 's/DEFINER[ ]*=[ ]*[^*]*\*/\*/' | gzip > $2.sql.gz
+}
+```
+
+### Magento 2 specific commands
+Clear back-end cache.
+Please, note that your container name MUST contain ``php-`` in the grep part.
+Pass your project folder name as an argument. Example ``removeBackCache hello.loc``
+```
+removeBackCache(){
+    docker exec -i $(docker ps --format "{{.Names}}" | grep "php-") rm -fr /var/www/$1/var/cache /var/www/$1/generated/metadata /var/www/$1/generated/code /var/www/$1/var/view_preprocessed /var/www/$1/var/page_cache
+}
+```
+
+Clear front-end cache.
+Please, note that your container name MUST contain ``php-`` in the grep part.
+Pass your project folder name as an argument. Example ``removeFrontCache hello.loc``
+```
+removeFrontCache(){
+    docker exec -i $(docker ps --format "{{.Names}}" | grep "php-") rm -fr /var/www/$1/var/cache /var/www/$1/var/view_preprocessed /var/www/$1/var/page_cache /var/www/$1/pub/static/frontend /var/www/$1/pub/static/_cache
+}
+```
+
+Run ``php bin/magento setup:upgrade``
+Please, note that your container name MUST contain ``php-`` in the grep part.
+Pass your project folder name as an argument. Example ``upgrade hello.loc``
+```
+upgrade(){
+    docker exec -i $(docker ps --format "{{.Names}}" | grep "php-") php /var/www/$1/bin/magento setup:upgrade
+}
+```
+
+Set developer mode ``php bin/magento deploy:mode:set developer``
+Please, note that your container name MUST contain ``php-`` in the grep part.
+Pass your project folder name as an argument. Example ``setDev hello.loc``
+```
+setDev(){
+    docker exec -i $(docker ps --format "{{.Names}}" | grep "php-") php /var/www/$1/bin/magento deploy:mode:set developer
+}
+```
+
+Set developer mode ``php bin/magento deploy:mode:set production``
+Please, note that your container name MUST contain ``php-`` in the grep part.
+Pass your project folder name as an argument. Example ``setProd hello.loc``
+```
+setProd(){
+    docker exec -i $(docker ps --format "{{.Names}}" | grep "php-") php /var/www/$1/bin/magento deploy:mode:set production
+}
+```
+
+Please, note that your container name MUST contain ``php-`` in the grep part.
+Pass your project folder name and db name as arguments. 
+Example ``installFreshMagento hello.loc test_db``
+```
+installFreshMagento(){
+    docker exec -i $1 php /var/www/$1/bin/magento setup:install \
+        --base-url=http://$1/ \
+        --db-host=mysql-server \
+        --db-name=$2 \
+        --db-user=root \
+        --db-password=root \
+        --admin-firstname=admin \
+        --admin-lastname=admin \
+        --admin-email=test@test.com \
+        --admin-user=admin \
+        --admin-password=123123 \
+        --language=en_US \
+        --currency=USD \
+        --timezone=America/Chicago \
+        --use-rewrites=1 \
+        --elasticsearch-host=elasticsearch \
+        --backend-frontname=admin
+}
+```
