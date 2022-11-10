@@ -3,8 +3,14 @@ Stack:
 - Nginx
 - PHP FPM 8.1
 - Maria DB 10.4
-- Elasticsearch 7.14.0
+- Elasticsearch 7.16.0
 - Phpmyadmin 5.0.1
+
+## Magento 2 supported versions:
+- 2.4.4
+- 2.4.4-p1
+- 2.4.4-p2
+- 2.4.5 (not verified)
 
 ## How to use
 
@@ -40,11 +46,11 @@ server {
     }
 }
 ```
-8) Don't forget to add your new domain ``my-new-project.loc`` to your computer hosts file
+8) Don't forget to add your new domain ``my-new-project.loc`` to your computer **hosts** file
 9) Go ``http://my-new-project.loc/`` to see your project
 
 ### Configure Magento:
-10) Create ``auth.json`` file in the root of your magento project. Fill it with your Adobe account keys and with your github oath key. Any extra credentials for any 3-rd party extensions can be added as well. Example:
+10) Create ``auth.json`` file in the root of your magento project and make sure it is git ignored. Fill it with your Adobe account keys and with your github oath key. Any extra credentials for any 3-rd party extensions can be added as well. Example:
 ```
 {
     "http-basic": {
@@ -58,6 +64,99 @@ server {
     }
 }
 ```
+
+11) Create ``app/etc/env.php``. And fill it with the data needed (host name, db name, etc.). Example:
+```
+<?php
+return [
+    'backend' => [
+        'frontName' => 'admin'
+    ],
+    'crypt' => [
+        'key' => 'eb54762b26d8bf1b484c9b57ec914cf6'
+    ],
+    'db' => [
+        'table_prefix' => '',
+        'connection' => [
+            'default' => [
+                'host' => 'maria',
+                'dbname' => 'test_db',
+                'username' => 'root',
+                'password' => 'root',
+                'active' => '1',
+                'driver_options' => [
+                    1014 => false,
+                    1001 => true
+                ],
+                'model' => 'mysql4',
+                'engine' => 'innodb',
+                'initStatements' => 'SET NAMES utf8;'
+            ]
+        ]
+    ],
+    'resource' => [
+        'default_setup' => [
+            'connection' => 'default'
+        ]
+    ],
+    'x-frame-options' => 'SAMEORIGIN',
+    'MAGE_MODE' => 'developer',
+    'session' => [
+        'save' => 'files'
+    ],
+    'cache' => [
+        'frontend' => [
+            'default' => [
+                'id_prefix' => '40d_'
+            ],
+            'page_cache' => [
+                'id_prefix' => '40d_'
+            ]
+        ]
+    ],
+    'lock' => [
+        'provider' => 'db',
+        'config' => [
+            'prefix' => ''
+        ]
+    ],
+    'cache_types' => [
+        'config' => 1,
+        'layout' => 1,
+        'block_html' => 1,
+        'collections' => 1,
+        'reflection' => 1,
+        'db_ddl' => 1,
+        'compiled_config' => 1,
+        'eav' => 1,
+        'customer_notification' => 1,
+        'config_integration' => 1,
+        'config_integration_api' => 1,
+        'full_page' => 1,
+        'config_webservice' => 1,
+        'translate' => 1,
+        'vertex' => 1,
+        'target_rule' => 1
+    ],
+    'downloadable_domains' => [
+        'jpw-b2c.loc'
+    ],
+    'install' => [
+        'date' => 'Fri, 07 Feb 2020 09:05:51 +0000'
+    ],
+    'queue' => [
+        'consumers_wait_for_messages' => 1
+    ],
+    'cron' => [
+        'enabled' => 0
+    ],
+    'directories' => [
+        'document_root_is_pub' => true
+    ]
+];
+```
+
+12) Run composer install or other commands needed. See bash scripts bellow in the bonus section.
 
 ## Bonus
 Add these bash scripts to your ``.bashrc`` files. Function name can be any you like.
