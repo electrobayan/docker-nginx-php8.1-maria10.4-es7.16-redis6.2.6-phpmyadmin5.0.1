@@ -2,7 +2,6 @@ version: '3.7'
 services:
     nginx:
         image: nginx:latest
-        restart: always
         ports:
             - "80:80"
             - "443:443"
@@ -23,14 +22,12 @@ services:
             - ~/.ssh:/root/.ssh
     maria:
         image: mariadb:10.4
-        restart: always
         ports:
             - "3306:3306"
         environment:
             MYSQL_ROOT_PASSWORD: root
     phpmyadmin:
         image: phpmyadmin/phpmyadmin:5.0.1
-        restart: always
         environment:
             PMA_HOST: maria
             PMA_USER: root
@@ -42,7 +39,6 @@ services:
             - nginx
     elasticsearch:
         build: ./elasticsearch
-        restart: always
         environment:
             - discovery.type=single-node
             - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # ES Memory limits
