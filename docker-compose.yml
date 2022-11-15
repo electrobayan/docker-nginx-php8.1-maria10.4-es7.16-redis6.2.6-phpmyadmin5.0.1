@@ -20,6 +20,8 @@ services:
             - ./www:/var/www
             - ./images/php/php.ini:/usr/local/etc/php/conf.d/40-custom.ini
             - ~/.ssh:/root/.ssh
+        environment:
+            PHP_IDE_CONFIG: "serverName=Docker"
     maria:
         image: mariadb:10.4
         ports:
