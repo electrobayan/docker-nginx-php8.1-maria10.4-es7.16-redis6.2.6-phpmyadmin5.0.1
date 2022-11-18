@@ -13,7 +13,12 @@ services:
             - php
             - maria
     php:
-        build: ./images/php
+        build:
+            context: ./images/php
+            args:
+                - PUID=${PUID}
+                - PGID=${PGID}
+                - INSTALL_XDEBUG=${INSTALL_XDEBUG}
         depends_on:
             - maria
         volumes:

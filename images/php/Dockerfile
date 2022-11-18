@@ -31,8 +31,11 @@ RUN docker-php-ext-install \
   xsl \
   zip
 
-RUN pecl install xdebug \
-    && docker-php-ext-enable xdebug
+ARG INSTALL_XDEBUG=false
+RUN if [ ${INSTALL_XDEBUG} = true ]; \
+    then \
+      pecl install xdebug && docker-php-ext-enable xdebug; \
+    fi;
 
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
 RUN docker-php-ext-install -j$(nproc) gd
@@ -40,9 +43,14 @@ RUN docker-php-ext-install -j$(nproc) gd
 RUN curl -sS https://getcomposer.org/installer | \
   php -- --install-dir=/usr/local/bin --filename=composer --version=2.1.6
 
+ARG PUID=1000
+ARG PGID=1000
+RUN groupmod -o -g ${PGID} www-data && \
+    usermod -o -u ${PUID} -g www-data www-data
+
+RUN chown www-data:www-data /var/www
 WORKDIR /var/www
 
-#Access Rights
-ARG user_id=1000
+USER www-data
 
 CMD ["php-fpm"]
