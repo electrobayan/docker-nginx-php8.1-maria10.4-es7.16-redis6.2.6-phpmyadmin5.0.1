@@ -4,3 +4,5 @@ www/*
 hosts/*
 !hosts/hello-loc.conf
 !hosts/phpmyadmin-loc.conf
+
+.env

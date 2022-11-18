@@ -17,13 +17,14 @@ Stack:
 ### Test run:
 1) Install Docker and Docker compose
 2) Clone the repository to your local machine
-3) Modify your hosts file by adding these two lines or your own:
+3) Prepare .env file. Just copy .env.dist file
+4) Modify your hosts file by adding these two lines or your own:
 ```
 127.0.0.1 hello.loc
 127.0.0.1 phpmyadmin.loc
 ```
-4) Run ``docker compose up -d`` from the root folder you just cloned
-5) Go ``http://hello.loc/`` to see PHP info default page or ``http://phpmyadmin.loc`` to see phpmyadmin panel to wor with databases
+5) Run ``docker compose up -d`` from the root folder you just cloned
+6) Go ``http://hello.loc/`` to see PHP info default page or ``http://phpmyadmin.loc`` to see phpmyadmin panel to wor with databases
 
 ### Create your domains:
 7) Create your own hosts for further work based on ``./hosts/hello-loc.conf``. Just copy it, rename and modify and edit. Example:
