@@ -54,6 +54,9 @@ rm_fe_cache:
 upgrade:
 	${DOCKER_COMPOSE} exec -u www-data php /var/www/${p}/bin/magento setup:upgrade
 
+reindex:
+	${DOCKER_COMPOSE} exec -u www-data php /var/www/${p}/bin/magento indexer:reindex
+
 s_dev:
 	${DOCKER_COMPOSE} exec -u www-data php /var/www/${p}/bin/magento deploy:mode:set developer
 
