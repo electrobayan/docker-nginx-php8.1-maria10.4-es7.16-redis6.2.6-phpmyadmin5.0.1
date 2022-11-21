@@ -86,7 +86,7 @@ m_install:
 # Db
 ##################
 db_import:
-	${DOCKER_COMPOSE} exec -it www-data ${c} mysql -uroot -proot ${db} < ${f}
+	${DOCKER_COMPOSE} exec -it ${c} mysql -uroot -proot ${db} < ${f}
 
 db_export:
 	${DOCKER_COMPOSE} exec -it ${c} mysqldump -uroot -proot ${db} | sed -e 's/DEFINER[ ]*=[ ]*[^*]*\*/\*/' | gzip > ${db}.sql.gz
