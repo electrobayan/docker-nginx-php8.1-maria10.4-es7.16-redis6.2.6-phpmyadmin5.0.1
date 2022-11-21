@@ -63,7 +63,7 @@ s_prod:
 m_install:
 	${DOCKER_COMPOSE} exec -u www-data php /var/www/${p}/bin/magento setup:install \
                                                    --base-url=http://${p}/ \
-                                                   --db-host=mysql-server \
+                                                   --db-host=${dbhost} \
                                                    --db-name=${db} \
                                                    --db-user=root \
                                                    --db-password=root \

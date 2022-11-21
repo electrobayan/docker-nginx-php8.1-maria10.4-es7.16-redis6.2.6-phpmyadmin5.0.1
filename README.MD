@@ -160,6 +160,15 @@ return [
 12) Run composer install or other commands needed. See bash scripts bellow in the bonus section.
 
 ## Bonus
+Use make scripts saved into ``Makefile`` to make your live easier :)
+1) Install make ``sudo apt install make``
+2) To use script just use it like that from your docker compose root directory where `p` is your project name folder in `www`: 
+```
+make composer_i p=hello.loc
+```
+Please, find the full list of command in the ``Makefile``
+
+### ...or another option is to:
 Add these bash scripts to your ``.bashrc`` files. Function name can be any you like.
 
 Enter your PHP container via CLI. 
