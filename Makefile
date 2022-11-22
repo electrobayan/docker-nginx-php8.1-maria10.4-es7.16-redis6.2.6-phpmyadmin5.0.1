@@ -51,11 +51,17 @@ rm_be_cache:
 rm_fe_cache:
 	${DOCKER_COMPOSE} exec -u www-data php rm -fr /var/www/${p}/var/cache /var/www/${p}/var/view_preprocessed /var/www/${p}/var/page_cache /var/www/${p}/pub/static/frontend /var/www/${p}/pub/static/_cache
 
+cache_flush:
+	${DOCKER_COMPOSE} exec -u www-data php /var/www/${p}/bin/magento cache:flush
+
 upgrade:
 	${DOCKER_COMPOSE} exec -u www-data php /var/www/${p}/bin/magento setup:upgrade
 
 reindex:
 	${DOCKER_COMPOSE} exec -u www-data php /var/www/${p}/bin/magento indexer:reindex
+
+image_resize:
+	${DOCKER_COMPOSE} exec -u www-data php /var/www/${p}/bin/magento catalog:images:resize
 
 s_dev:
 	${DOCKER_COMPOSE} exec -u www-data php /var/www/${p}/bin/magento deploy:mode:set developer
