@@ -39,6 +39,9 @@ dc_restart:
 bash:
 	${DOCKER_COMPOSE} exec -u www-data php bash
 
+git_clone:
+	${DOCKER_COMPOSE} exec -it php git clone ${r} /var/www/${p}
+
 composer_i:
 	${DOCKER_COMPOSE} exec -u www-data php composer install --working-dir=/var/www/${p}
 
@@ -92,7 +95,7 @@ m_install:
 # Db
 ##################
 db_import:
-	${DOCKER_COMPOSE} exec -it ${c} mysql -uroot -proot ${db} < ${f}
+	${DOCKER_COMPOSE} exec -T ${c} mysql -uroot -proot ${db} < ${f}
 
 db_export:
-	${DOCKER_COMPOSE} exec -it ${c} mysqldump -uroot -proot ${db} | sed -e 's/DEFINER[ ]*=[ ]*[^*]*\*/\*/' | gzip > ${db}.sql.gz
+	${DOCKER_COMPOSE} exec -T ${c} mysqldump -uroot -proot ${db} | sed -e 's/DEFINER[ ]*=[ ]*[^*]*\*/\*/' | gzip > ${db}.sql.gz

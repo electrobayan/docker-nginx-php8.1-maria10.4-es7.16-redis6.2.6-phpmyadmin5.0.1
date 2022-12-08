@@ -49,6 +49,11 @@ RUN groupmod -o -g ${PGID} www-data && \
     usermod -o -u ${PUID} -g www-data www-data
 
 RUN chown www-data:www-data /var/www
+
+RUN apt-get install acl && \
+    setfacl -dR -m u:www-data:rwX -m u:$(whoami):rwX /var/www && \
+    setfacl -R -m u:www-data:rwX -m u:$(whoami):rwX /var/www
+
 WORKDIR /var/www
 
 USER www-data
