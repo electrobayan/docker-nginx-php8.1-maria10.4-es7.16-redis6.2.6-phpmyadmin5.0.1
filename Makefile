@@ -73,7 +73,7 @@ s_prod:
 	${DOCKER_COMPOSE} exec -u www-data php /var/www/${p}/bin/magento deploy:mode:set production
 
 m_install:
-	${DOCKER_COMPOSE} exec -u www-data php /var/www/${p}/bin/magento setup:install \
+	${DOCKER_COMPOSE} exec -u www-data php composer create-project --repository-url=https://repo.magento.com/ magento/project-community-edition /var/www/${p} && ${DOCKER_COMPOSE} exec -u www-data php /var/www/${p}/bin/magento setup:install \
                                                    --base-url=http://${p}/ \
                                                    --db-host=${dbhost} \
                                                    --db-name=${db} \
@@ -83,7 +83,7 @@ m_install:
                                                    --admin-lastname=admin \
                                                    --admin-email=test@test.com \
                                                    --admin-user=admin \
-                                                   --admin-password=123123 \
+                                                   --admin-password=b2b4you \
                                                    --language=en_US \
                                                    --currency=USD \
                                                    --timezone=America/Chicago \
