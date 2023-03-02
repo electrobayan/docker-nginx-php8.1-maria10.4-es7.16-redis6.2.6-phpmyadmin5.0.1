@@ -50,4 +50,12 @@ services:
         environment:
             - discovery.type=single-node
             - "ES_JAVA_OPTS=-Xms512m -Xmx512m" # ES Memory limits
-
+    redis:
+        image: redis:6.2.6
+        restart: always
+        ports:
+            - '6379:6379'
+        depends_on:
+            - maria
+            - php
+            - nginx
