@@ -4,6 +4,7 @@ Stack:
 - PHP FPM 8.1
 - Maria DB 10.4
 - Elasticsearch 7.16.0
+- Redis 6.2.6
 - Phpmyadmin 5.0.1
 
 ## Magento 2 supported versions:
